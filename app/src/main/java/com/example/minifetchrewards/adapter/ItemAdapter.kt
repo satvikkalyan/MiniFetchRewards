@@ -1,30 +1,24 @@
 package com.example.minifetchrewards.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.minifetchrewards.R
+import com.example.minifetchrewards.databinding.ItemLayoutBinding
 import com.example.minifetchrewards.models.Items
 
 class ItemAdapter(private val itemList: ArrayList<Items>): RecyclerView.Adapter<ItemAdapter.ViewHolder>(){
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val rvItemId : TextView = itemView.findViewById(R.id.itemId)
-        val rvItemName : TextView = itemView.findViewById(R.id.itemName)
+    inner class ViewHolder(val binding: ItemLayoutBinding) : RecyclerView.ViewHolder(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemAdapter.ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
-        return ViewHolder(itemView)
-    }
-
-    override fun onBindViewHolder(holder: ItemAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = itemList[position]
-        holder.rvItemId.text = currentItem.itemID.toString()
-        holder.rvItemName.text = currentItem.itemName
+        holder.binding.item = currentItem
+        holder.binding.executePendingBindings()
     }
-
     override fun getItemCount(): Int {
             return itemList.size
     }
