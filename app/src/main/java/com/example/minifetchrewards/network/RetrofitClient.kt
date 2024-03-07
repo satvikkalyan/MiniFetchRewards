@@ -3,6 +3,11 @@ package com.example.minifetchrewards.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * Singleton object to initialize and provide a Retrofit instance.
+ * This object ensures that Retrofit is only initialized once throughout the application,
+ * improving performance by reusing the instance for all network requests.
+ */
 object RetrofitClient {
     private const val BASE_URL = "https://fetch-hiring.s3.amazonaws.com/"
 

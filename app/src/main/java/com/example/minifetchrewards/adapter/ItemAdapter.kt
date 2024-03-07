@@ -6,6 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.minifetchrewards.databinding.ItemLayoutBinding
 import com.example.minifetchrewards.models.Item
 
+/**
+ * ItemAdapter is an Adapter for the RecyclerView to display items.
+ *
+ * @param itemList List of Item objects to be displayed in the RecyclerView.
+ */
 class ItemAdapter(private val itemList: ArrayList<Item>): RecyclerView.Adapter<ItemAdapter.ViewHolder>(){
     inner class ViewHolder(val binding: ItemLayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -16,6 +21,7 @@ class ItemAdapter(private val itemList: ArrayList<Item>): RecyclerView.Adapter<I
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = itemList[position]
+        // Set the item to the binding variable created in the item layout file.
         holder.binding.item = currentItem
     }
     override fun getItemCount(): Int {
