@@ -1,3 +1,7 @@
 package com.example.minifetchrewards.models
 
-data class Items(var itemID: Int, var itemName: String)
+data class Item(
+    var id: Int,
+    var listId: Int,
+    var name: String?
+)
