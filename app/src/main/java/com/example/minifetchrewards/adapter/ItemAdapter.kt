@@ -18,12 +18,12 @@ class ItemAdapter(private val itemList: ArrayList<ListContent>): RecyclerView.Ad
         private const val TYPE_ITEM = 1
     }
 
-    class ItemViewHolder(val binding: ItemLayoutBinding) : RecyclerView.ViewHolder(binding.root){
+    class ItemViewHolder(private val binding: ItemLayoutBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(item: ListContent.Item){
             binding.item = item
         }
     }
-    class HeaderViewHolder(val headerLayoutBinding: HeaderLayoutBinding) : RecyclerView.ViewHolder(headerLayoutBinding.root){
+    class HeaderViewHolder(private val headerLayoutBinding: HeaderLayoutBinding) : RecyclerView.ViewHolder(headerLayoutBinding.root){
         fun bind(header: ListContent.Header){
             headerLayoutBinding.header = header
         }
