@@ -27,4 +27,9 @@ class ItemAdapter(private val itemList: ArrayList<Item>): RecyclerView.Adapter<I
     override fun getItemCount(): Int {
             return itemList.size
     }
+    fun updateItems(newItems: List<Item>) {
+        itemList.clear()
+        itemList.addAll(newItems)
+        notifyDataSetChanged()
+    }
 }
