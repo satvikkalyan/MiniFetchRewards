@@ -3,7 +3,7 @@ package com.example.minifetchrewards.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.minifetchrewards.models.Item
+import com.example.minifetchrewards.models.ListContent
 import com.example.minifetchrewards.repository.ItemRepository
 
 /**
@@ -13,8 +13,8 @@ import com.example.minifetchrewards.repository.ItemRepository
  */
 class ItemViewModel(private val itemRepository: ItemRepository) : ViewModel() {
 
-    private val _items = MutableLiveData<List<Item>>()
-    val items: LiveData<List<Item>> = _items
+    private val _items = MutableLiveData<List<ListContent>>()
+    val items: LiveData<List<ListContent>> = _items
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
@@ -23,7 +23,7 @@ class ItemViewModel(private val itemRepository: ItemRepository) : ViewModel() {
         fetchItems()
     }
 
-    private fun fetchItems() {
+    fun fetchItems() {
         itemRepository.fetchItems(
             successHandler = { items ->
                 _items.value = items

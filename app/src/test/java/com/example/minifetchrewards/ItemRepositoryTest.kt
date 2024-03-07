@@ -1,5 +1,7 @@
 package com.example.minifetchrewards
+
 import com.example.minifetchrewards.models.Item
+import com.example.minifetchrewards.models.ListContent
 import com.example.minifetchrewards.network.ApiService
 import com.example.minifetchrewards.repository.ItemRepository
 import org.junit.Assert.assertEquals
@@ -13,11 +15,11 @@ import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 @RunWith(MockitoJUnitRunner::class)
 class ItemRepositoryTest {
 
@@ -34,7 +36,6 @@ class ItemRepositoryTest {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
         `when`(mockApiService.fetchItems()).thenReturn(mockCall)
         itemRepository = ItemRepository(mockApiService)
     }
@@ -49,16 +50,19 @@ class ItemRepositoryTest {
             Item(5, 2, "Carrot")
         )
 
-        itemRepository.fetchItems(successHandler = {
-            val expectedItems = arrayListOf(
-                Item(3, 1, "Apple"),
-                Item(2, 1, "Banana"),
-                Item(5, 2, "Carrot")
+        itemRepository.fetchItems(successHandler = { items ->
+            val expectedItems = arrayListOf<ListContent>(
+                ListContent.Header(1),
+                ListContent.Item(3, 1, "Apple"),
+                ListContent.Item(2, 1, "Banana"),
+                ListContent.Header(2),
+                ListContent.Item(5, 2, "Carrot")
             )
-            assertEquals(expectedItems, it)
+            assertEquals(expectedItems, items)
         }, errorHandler = {
             fail("Expected success handler to be invoked")
         })
+
         verify(mockCall).enqueue(callbackCaptor.capture())
         callbackCaptor.value.onResponse(mockCall, Response.success(unsortedAndInvalidItems))
     }
@@ -84,5 +88,4 @@ class ItemRepositoryTest {
         })
         verify(mockCall).enqueue(callbackCaptor.capture())
         callbackCaptor.value.onFailure(mockCall, error)
-    }
-}
+    }}

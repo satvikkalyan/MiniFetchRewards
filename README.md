@@ -44,6 +44,10 @@ Unit testing has been performed for the necessary components, ensuring the relia
 - **Repository Testing**: Tests the repository methods for fetching and processing items from the API.
 - **Adapter Testing**: Validates the behavior of the RecyclerView adapter for displaying items.
 
+## Error Handling
+
+- **User Alerts**: In case of an API failure, the app will display a toast notification to inform the user about the issue, avoiding any user confusion.
+
 ## Dependencies
 
 - Retrofit: For making network requests and handling API communication.
@@ -51,5 +55,6 @@ Unit testing has been performed for the necessary components, ensuring the relia
 - ViewModel and LiveData: For managing UI-related data in a lifecycle-conscious way.
 - RecyclerView: For displaying a scrollable list of items.
 - Data Binding: For binding UI components to data sources in the ViewModel.
+
 
 

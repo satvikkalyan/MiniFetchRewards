@@ -1,49 +1,55 @@
 package com.example.minifetchrewards
 
 import com.example.minifetchrewards.adapter.ItemAdapter
-import com.example.minifetchrewards.models.Item
+import com.example.minifetchrewards.models.ListContent
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class ItemAdapterTest {
 
     private lateinit var adapter: ItemAdapter
-
-    @Mock
-    private lateinit var itemList: ArrayList<Item>
-
-
+    private lateinit var listContents: ArrayList<ListContent>
 
     @Before
     fun setUp() {
-        itemList = ArrayList()
-        itemList.add(Item(1, 1,"1"))
-        itemList.add(Item(2, 2,"2"))
-        itemList.add(Item(3, 3,"3"))
+        listContents = ArrayList<ListContent>().apply {
+            add(ListContent.Header(1))
+            add(ListContent.Item(1, 1, "Item 1"))
+            add(ListContent.Item(2, 1, "Item 2"))
+        }
 
-        adapter = ItemAdapter(itemList)
+        adapter = ItemAdapter(listContents)
     }
 
     @Test
-    fun `item count should match`() {
+    fun `item count should match including headers`() {
+        // Expect 3 because we have 1 header and 2 items
         assertEquals(3, adapter.itemCount)
     }
 
     @Test
     fun `verify item at position`() {
-        val expectedItem = Item(1, 1,"1")
-        assertEquals(expectedItem, itemList[0])
+        // Testing against the second item in the list, which is the first item after the header
+        val expectedItem = ListContent.Item(1, 1, "Item 1")
+        val actualItem = listContents[1] // This gets the first ListContent.Item
+        assertEquals(expectedItem, actualItem)
     }
-
 
     @Test
-    fun `verify getItemCount`() {
-        assertEquals(3, adapter.itemCount)
+    fun `verify header at position`() {
+        // Verifying the header
+        val expectedHeader = ListContent.Header(1)
+        val actualHeader = listContents[0] // This is the header
+        assertEquals(expectedHeader, actualHeader)
     }
 
+    @Test
+    fun `verify getItemCount includes headers and items`() {
+        // This should include both headers and items
+        assertEquals(3, adapter.itemCount)
+    }
 }

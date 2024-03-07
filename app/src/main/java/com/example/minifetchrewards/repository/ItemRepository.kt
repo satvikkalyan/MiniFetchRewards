@@ -1,6 +1,7 @@
 package com.example.minifetchrewards.repository
 
 import com.example.minifetchrewards.models.Item
+import com.example.minifetchrewards.models.ListContent
 import com.example.minifetchrewards.network.ApiService
 
 class ItemRepository(private val apiService: ApiService) {
@@ -13,7 +14,7 @@ class ItemRepository(private val apiService: ApiService) {
      * @param successHandler A lambda that is called with the list of processed items on success.
      * @param errorHandler A lambda that is called with an error on failure.
      */
-    fun fetchItems(successHandler: (ArrayList<Item>) -> Unit, errorHandler: (Throwable) -> Unit) {
+    fun fetchItems(successHandler: (ArrayList<ListContent>) -> Unit, errorHandler: (Throwable) -> Unit) {
         apiService.fetchItems().enqueue(object : retrofit2.Callback<List<Item>> {
             override fun onResponse(call: retrofit2.Call<List<Item>>, response: retrofit2.Response<List<Item>>) {
                 if (response.isSuccessful) {
@@ -37,13 +38,15 @@ class ItemRepository(private val apiService: ApiService) {
      * @param items The raw list of items fetched from the API.
      * @return A list of processed items that are filtered and sorted.
      */
-    fun processItems(items: List<Item>?): ArrayList<Item> {
-        return items
-            // Filter out items where the name is null or blank.
+    fun processItems(items: List<Item>?): ArrayList<ListContent> {
+        val groupedItems = items
             ?.filter { it.name?.isNotBlank() == true }
-            // Sort the remaining items first by their listId, then by name.
             ?.sortedWith(compareBy({ it.listId }, { it.name }))
-            // Convert the list to an ArrayList. If the input is null return an empty list
-            ?.let { ArrayList(it) } ?: arrayListOf()
+            ?.groupBy { it.listId }
+            ?.flatMap { entry ->
+                listOf(ListContent.Header(entry.key)) + entry.value.map { ListContent.Item(it.id, it.listId, it.name) }
+            } ?: arrayListOf()
+
+        return ArrayList(groupedItems)
     }
 }
