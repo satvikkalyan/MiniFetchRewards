@@ -1,19 +1,19 @@
 package com.example.minifetchrewards
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.minifetchrewards.adapter.ItemAdapter
 import com.example.minifetchrewards.databinding.ActivityMainBinding
 import com.example.minifetchrewards.models.Item
-import com.example.minifetchrewards.network.ApiService
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.minifetchrewards.network.RetrofitClient
+import com.example.minifetchrewards.repository.ItemRepository
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val baseUrl = "https://fetch-hiring.s3.amazonaws.com/"
+    private val itemRepository = ItemRepository(RetrofitClient.apiService)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,29 +23,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchItems() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val apiService = retrofit.create(ApiService::class.java)
-        apiService.fetchItems().enqueue(object : retrofit2.Callback<List<Item>> {
-            override fun onResponse(call: retrofit2.Call<List<Item>>, response: retrofit2.Response<List<Item>>) {
-                if (response.isSuccessful) {
-                    val filteredSortedItems = response.body()
-                        ?.filter { it.name?.isNotBlank() == true }
-                        ?.sortedWith(compareBy({ it.listId }, { it.name }))
-                        ?.let { ArrayList(it) }
-                    filteredSortedItems?.let {
-                        setupRecyclerView(it)
-                    }
-                }
+        itemRepository.fetchItems(
+            successHandler = { items ->
+                setupRecyclerView(items)
+            },
+            errorHandler = { throwable ->
+                Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
             }
-
-            override fun onFailure(call: retrofit2.Call<List<Item>>, t: Throwable) {
-                // Handle failure
-            }
-        })
+        )
     }
     private fun setupRecyclerView(items: ArrayList<Item>) {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)

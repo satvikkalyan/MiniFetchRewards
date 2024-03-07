@@ -1,8 +1,7 @@
 package com.example.minifetchrewards
 
-import android.view.ViewGroup
 import com.example.minifetchrewards.adapter.ItemAdapter
-import com.example.minifetchrewards.models.Items
+import com.example.minifetchrewards.models.Item
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -16,18 +15,16 @@ class ItemAdapterTest {
     private lateinit var adapter: ItemAdapter
 
     @Mock
-    private lateinit var itemList: ArrayList<Items>
+    private lateinit var itemList: ArrayList<Item>
 
-    @Mock
-    private lateinit var mockParent: ViewGroup
 
 
     @Before
     fun setUp() {
         itemList = ArrayList()
-        itemList.add(Items(1, "Item 1"))
-        itemList.add(Items(2, "Item 2"))
-        itemList.add(Items(3, "Item 3"))
+        itemList.add(Item(1, 1,"1"))
+        itemList.add(Item(2, 2,"2"))
+        itemList.add(Item(3, 3,"3"))
 
         adapter = ItemAdapter(itemList)
     }
@@ -39,7 +36,7 @@ class ItemAdapterTest {
 
     @Test
     fun `verify item at position`() {
-        val expectedItem = Items(1, "Item 1")
+        val expectedItem = Item(1, 1,"1")
         assertEquals(expectedItem, itemList[0])
     }
 
